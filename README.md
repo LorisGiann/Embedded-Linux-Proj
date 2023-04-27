@@ -8,7 +8,7 @@ The modules were designed according to the following diagram. Each module perfor
 ![Module Diagram](img/ModuleDiagram.jpeg)
 ### PICO Read Module
 - [x] In Progress
-- [ ] Done
+- [x] Done
 
 Reads serial input from PICO and outputs data to appropriate topics
 ### Water Request Gate
