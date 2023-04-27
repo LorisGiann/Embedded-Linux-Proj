@@ -159,7 +159,7 @@ void loop() {
   }
 
   Adafruit_MQTT_Subscribe *subscription;
-  while ((subscription = mqtt.readSubscription(5000))) {
+  while ((subscription = mqtt.readSubscription(2000))) {
     if (subscription == &redLed) {
       Serial.print(F("Got: "));
       Serial.println((char *)redLed.lastread);
