@@ -23,9 +23,9 @@ Every 12 hours, request to pump
 - [X] Done
 
 ### Moisture Water Module
-Read .../soil_moisture topic. If low, request to pup
+Read .../soil_moisture topic. If low, request to pump with a frequency of once in an hour
 - [X] In Progress
-- [ ] Done
+- [X] Done
 
 ### Button Water Module
 If the .../button_count is one, request to pump
@@ -40,7 +40,7 @@ else GREEN
 - [ ] Done
 
 ### Log Module
-Log data to mqtt for graphana
+Log system health data to mqtt
 - [ ] In Progress
 - [ ] Done
 
