@@ -20,7 +20,7 @@ Reads the .../pump_request topic and .../water_alarm topic. If there is no alarm
 ### Regular Water Module
 Every 12 hours, request to pump
 - [X] In Progress
-- [ ] Done
+- [X] Done
 
 ### Moisture Water Module
 Read .../soil_moisture topic. If low, request to pup
