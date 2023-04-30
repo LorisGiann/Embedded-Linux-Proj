@@ -30,7 +30,7 @@ Read .../soil_moisture topic. If low, request to pump with a frequency of once i
 ### Button Water Module
 If the .../button_count is one, request to pump
 - [X] In Progress
-- [ ] Done
+- [X] Done
 
 ### LED Module
 if Water alarm or plant alarm, light RED
@@ -41,7 +41,7 @@ else GREEN
 
 ### Log Module
 Log system health data to mqtt
-- [ ] In Progress
+- [X] In Progress
 - [ ] Done
 
 ## Graphana Interface
