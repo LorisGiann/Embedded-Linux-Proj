@@ -42,7 +42,8 @@ else GREEN
 ### Log Module
 Log system health data to mqtt
 - [X] In Progress
-- [ ] Done
+- [X] Done
+- [ ] Tested (cpu temperature works?)
 
 ## Graphana Interface
 Show logged info on Graphana Dashboard
