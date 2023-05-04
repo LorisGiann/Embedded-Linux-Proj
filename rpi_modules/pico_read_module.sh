@@ -7,20 +7,21 @@ cd ${SCR_DIR}
 #constants / definitions
 DEV=$1
 PICO_DEVICE_FILE=$2
+i=0
+TOPICS[$((i++))]="pump_alarm"
+TOPICS[$((i++))]="plant_alarm"
+TOPICS[$((i++))]="soil_moisture"
+TOPICS[$((i++))]="ambient_light"
 
-while [ true ]; do
-	# Read device for commas separated values
-	args=$(timeout 1s cat ${PICO_DEVICE_FILE})
-	#echo "${args} read"
+cat ${PICO_DEVICE_FILE} | while read LINE ; do	
+	# Each lines consists in a collection of comma separeted values: replace commas with spaces
+	values=$(echo $LINE | sed 's/,/ /g')
 	
-	# Replace commas with spaces
-	args=$(echo $args | sed 's/,/ /g')
-	#echo "${args} modified "
-	
-	# Feed into publish script (uses each value as an arguement)
-	./pub_values.sh $DEV ${args}
-	#echo done
-	
-	
-	sleep 5
+	# publish each value on relevant topic
+	TOPIC_NUM=0
+	for value in $values; do
+	  ./mqtt_pub.sh $DEV/${TOPICS[$TOPIC_NUM]} $value
+	  #echo "$DEV/${TOPICS[$TOPIC_NUM]} $value"
+	  ((TOPIC_NUM++))
+	done
 done
