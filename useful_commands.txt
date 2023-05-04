@@ -1,0 +1,20 @@
+# ------------------------ SUBSCRIBING TO PICO PRODUCED VALUES ----------------------
+mosquitto_sub -h localhost -p 1883 -t dev0/soil_moisture -t dev0/plant_alarm -t dev0/pump_alarm -t dev0/ambient_light -d -u pi -P raspberry -F "%t %p" | grep -vE '^Client|^Subscribed'
+
+
+
+# -------------------------------- EMULATING PICO -----------------------------------
+
+cd rpi_modules/
+
+#Create the device file devttyACM0, and another device that is the other end we use to emulate what the device would send and receive
+socat PTY,raw,echo=0,link=devttyACM0 PTY,raw,echo=0,link=devttyACM0_socat &
+sleep 1
+#This other end (devttyACM0_socat) is the one we now connect our terminal. We can write things pretending to be the device, and read the things the device would receive
+cat devttyACM0_socat & PID=$! ; cat | while read LINE ; do echo $LINE > devttyACM0_socat; done
+kill $PID
+
+#optionally, we can see what the program would see reading the device file, and write to the device pretending to be the program
+#do not run the following when your program is running!!
+cat devttyACM0 & PID=$! ; cat | while read LINE ; do echo $LINE > devttyACM0; done
+kill $PID
