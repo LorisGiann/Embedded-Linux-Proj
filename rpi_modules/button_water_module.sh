@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #constants / definitions
-DEV=dev0
+DEV=$1
 MAX_RUN_FREQ=2  #pump is activated not more often than once every X seconds
 
 #topics to subscribe

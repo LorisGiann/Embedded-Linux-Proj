@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #constants / definitions
-DEV=dev0
+DEV=$1
 MOISTURE_THRESH=40 #water pump is activated every hour if moisture falls below this percentage
 MAX_RUN_FREQ=3600  #pump is activated not more often than once every X seconds
 

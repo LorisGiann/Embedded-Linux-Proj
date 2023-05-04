@@ -1,6 +1,8 @@
 #!/bin/bash
 
-PUMP_REQ_TOPIC=dev0/pump_req
+#constants / definitions
+DEV=$1
+PUMP_REQ_TOPIC=$DEV/pump_req
 
 WAIT_FOR_SECONDS=$((1*1*60))
 PRINT_EVERY_SECONDS=10

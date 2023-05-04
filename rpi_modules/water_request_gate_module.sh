@@ -1,6 +1,8 @@
 #!/bin/bash
 
-PICO_DEVICE_FILE=devttyACM0
+#constants / definitions
+DEV=$1
+PICO_DEVICE_FILE=$2
 
 PUMP_REQ_TOPIC=dev0/pump_req
 PUMP_ALARM_TOPIC=dev0/pump_alarm

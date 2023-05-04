@@ -1,13 +1,18 @@
+
+#constants / definitions
+DEV=$1
+
+
 SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
-# echo ${SCR_DIR}
+cd ${SCR_DIR}
+#pub=${SCR_DIR}/mqtt_pub.sh
+#echo ${SCR_DIR}
 
-pub=${SCR_DIR}/mqtt_pub.sh
+./mqtt_pub.sh $DEV/pump_alarm $2
 
-${pub} dev0/water_alarm $1
+./mqtt_pub.sh $DEV/plant_alarm $3
 
-${pub} dev0/plant_alarm $2
+./mqtt_pub.sh $DEV/soil_moisture $4
 
-${pub} dev0/soil_moisture $3
-
-${pub} dev0/ambient_light $4
+./mqtt_pub.sh $DEV/ambient_light $5
 
