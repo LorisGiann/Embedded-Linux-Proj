@@ -55,7 +55,12 @@ read -n 1 -s
 # Kill all the background processes using their PIDs
 echo "Terminating background processes..."
 for pid in "${pids[@]}"; do
-  kill $pid
+  kill -TERM -- -$pid
+done
+#
+sleep 1
+for pid in "${pids[@]}"; do
+  kill -9 -$pid #SIGKILL, just to be sure
 done
 echo "Background processes terminated"
 
