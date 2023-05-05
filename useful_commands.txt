@@ -1,6 +1,8 @@
 # ------------------------ SUBSCRIBING TO PICO PRODUCED VALUES ----------------------
 mosquitto_sub -h localhost -p 1883 -t dev0/soil_moisture -t dev0/plant_alarm -t dev0/pump_alarm -t dev0/ambient_light -d -u pi -P raspberry -F "%t %p" | grep -vE '^Client|^Subscribed'
 
+# -------------------------- SIMULATING ESP BUTTON PRESS ----------------------------
+mosquitto_pub -h localhost -p 1883 -t dev0/button -m 0 -u pi -P raspberry
 
 
 # -------------------------------- EMULATING PICO -----------------------------------

@@ -15,8 +15,10 @@ pids=()  # Initialize an empty array to hold the PIDs of the background processe
 rm -rf logs > /dev/null 2>&1 # Initialize a directory for logs
 mkdir logs
 
+#Each instance is launched in a new session so that all subprocesses can be terminated at a later time by sending the signal to the relevant process group
+
 #start by appending the RPI system health log module
-./log_module.sh > logs/log_module.sh.log 2>&1 &
+setsid ./log_module.sh > logs/log_module.sh.log 2>&1 &
 pids+=($!)
 
 #Iterate over each device to launch an istance of all the modules
@@ -26,27 +28,28 @@ do
 	echo "Starting modules processes for $DEV..."
 	
 	#"receiving" modules (edge devs -> system core)
-	./pico_read_module.sh $DEV ${DEVS[$DEV]} > logs/pico_read_module.sh.log 2>&1 &
+	setsid ./pico_read_module.sh $DEV ${DEVS[$DEV]} > logs/pico_read_module.sh.log 2>&1 &
 	pids+=($!)
-	./button_water_module.sh $DEV > logs/button_water_module.sh.log 2>&1 &
+	setsid ./button_water_module.sh $DEV > logs/button_water_module.sh.log 2>&1 &
 	pids+=($!)
 	
 	#"actuation" modules (system core -> edge devs) 
-	./water_request_gate_module.sh $DEV ${DEVS[$DEV]} > logs/water_request_gate_module.sh.log 2>&1 &
+	setsid ./water_request_gate_module.sh $DEV ${DEVS[$DEV]} > logs/water_request_gate_module.sh.log 2>&1 &
 	pids+=($!)
-	#./led_module.sh $DEV ${DEVS[$DEV]} > logs/led_module.sh.log 2>&1 &
+	#setsid ./led_module.sh $DEV ${DEVS[$DEV]} > logs/led_module.sh.log 2>&1 &
 	#pids+=($!)
 	
 	#processing / event generation modules
-	./moisture_water_module.sh $DEV > logs/moisture_water_module.sh.log 2>&1 &
+	setsid ./moisture_water_module.sh $DEV > logs/moisture_water_module.sh.log 2>&1 &
 	pids+=($!)
-	./regular_water_module.sh $DEV > logs/regular_water_module.sh.log 2>&1 &
+	setsid ./regular_water_module.sh $DEV > logs/regular_water_module.sh.log 2>&1 &
 	pids+=($!)
 	
 done
 
 
 echo "Background modules processes started (PIDs: ${pids[@]})"
+ps fj -P ${pids[@]}
 
 # Wait for user input to terminate the background processes
 echo "Press any key to terminate the system"
@@ -54,13 +57,11 @@ read -n 1 -s
 
 # Kill all the background processes using their PIDs
 echo "Terminating background processes..."
-for pid in "${pids[@]}"; do
-  kill -TERM -- -$pid
-done
-#
-sleep 1
-for pid in "${pids[@]}"; do
-  kill -9 -$pid #SIGKILL, just to be sure
+for PID in "${pids[@]}"; do
+	PGID=$(ps opgid= "$PID" | tr -d ' ') #get the whole process group of the session with the launghed command. Tipically PGID is the same of the root PID
+	if [ -z "$PGID" ]; then continue; fi
+	kill -SIGTERM -$PGID #term all the processes of the group
 done
 echo "Background processes terminated"
+ps fj -P ${pids[@]}
 
