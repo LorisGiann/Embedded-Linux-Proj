@@ -87,9 +87,9 @@ void MQTT_connect();
 
 //helper for changing led status
 void pinChange(int pin, char * string){
-  if(strcmp(string,"on")==0){
+  if(strcmp(string,"1")==0){
     digitalWrite(pin, HIGH);
-  }else if(strcmp(string,"off")==0){
+  }else if(strcmp(string,"0")==0){
     digitalWrite(pin, LOW);
   }
 }
@@ -159,7 +159,7 @@ void loop() {
   }
 
   Adafruit_MQTT_Subscribe *subscription;
-  while ((subscription = mqtt.readSubscription(2000))) {
+  while ((subscription = mqtt.readSubscription(500))) {
     if (subscription == &redLed) {
       Serial.print(F("Got: "));
       Serial.println((char *)redLed.lastread);
