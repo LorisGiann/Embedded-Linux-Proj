@@ -34,6 +34,12 @@ def pump_request():
         select_result = uselect.select([stdin], [], [], 0)
     return result
 
+def negate(x):
+    if x == 0:
+        return 1
+    else:
+        return 0
+
 while True:
     led_builtin.toggle()
     if pump_request():
@@ -42,5 +48,5 @@ while True:
         pump_control.low()
     else:
         utime.sleep(1)
-        print("%d,%d,%.0f,%.0f" % (plant_water_alarm.value(), pump_water_alarm.value(), moisture(),light()))
+        print("%d,%d,%.0f,%.0f" % (plant_water_alarm.value(), negate(pump_water_alarm.value()), moisture(),light()))
 
