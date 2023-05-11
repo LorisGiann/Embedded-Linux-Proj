@@ -36,8 +36,8 @@ do
 	#"actuation" modules (system core -> edge devs) 
 	setsid ./water_request_gate_module.sh $DEV ${DEVS[$DEV]} > logs/water_request_gate_module.sh.log 2>&1 &
 	pids+=($!)
-	#setsid ./led_module.sh $DEV ${DEVS[$DEV]} > logs/led_module.sh.log 2>&1 &
-	#pids+=($!)
+	setsid ./led_module.sh $DEV ${DEVS[$DEV]} > logs/led_module.sh.log 2>&1 &
+	pids+=($!)
 	
 	#processing / event generation modules
 	setsid ./moisture_water_module.sh $DEV > logs/moisture_water_module.sh.log 2>&1 &

@@ -13,7 +13,7 @@ TOPICS[$((i++))]="plant_alarm"
 TOPICS[$((i++))]="soil_moisture"
 TOPICS[$((i++))]="ambient_light"
 
-cat ${PICO_DEVICE_FILE} | while read LINE ; do	
+cat ${PICO_DEVICE_FILE} | grep -E --line-buffered '^[0-1],[0-1],[0-9]{1,3},[0-9]{1,3}$' | while read LINE ; do	
 	# Each lines consists in a collection of comma separeted values: replace commas with spaces
 	values=$(echo $LINE | sed 's/,/ /g')
 	

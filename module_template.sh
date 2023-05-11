@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #constants / definitions
-DEV=dev0
+DEV=$1 # Pass in device as first argument
 
 
 #topics to subscribe

@@ -12,7 +12,8 @@ declare -A METRICS
 while true ; do
 	#CPU usage and temperature
 	METRICS["percent_cpu"]=$(top -bn1 | awk '/Cpu/{print $2}')
-	METRICS["temp_cpu"]=$(/usr/bin/vcgencmd measure_temp)
+	#METRICS["temp_cpu"]=$(/usr/bin/vcgencmd measure_temp) #works on raspbian
+	METRICS["temp_cpu"]=$(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000))  #works on ubuntu 
 
 	#RAM usage
 	available_mem=$(free | grep Mem | awk '{print $3}')
