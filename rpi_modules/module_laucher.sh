@@ -8,7 +8,7 @@ cd ${SCR_DIR}
 # - a list of keys identifying the MQTT topics folder in which informations regarding a plant are published
 # - for each key the device file for the pico assiciated with the plant is specified
 declare -A DEVS
-DEVS["dev0"]="devttyACM0"
+DEVS["dev0"]="/dev/ttyACM0"
 
 
 pids=()  # Initialize an empty array to hold the PIDs of the background processes
