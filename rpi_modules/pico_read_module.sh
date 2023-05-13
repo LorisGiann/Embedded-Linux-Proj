@@ -8,8 +8,8 @@ cd ${SCR_DIR}
 DEV=$1
 PICO_DEVICE_FILE=$2
 i=0
-TOPICS[$((i++))]="pump_alarm"
 TOPICS[$((i++))]="plant_alarm"
+TOPICS[$((i++))]="pump_alarm"
 TOPICS[$((i++))]="soil_moisture"
 TOPICS[$((i++))]="ambient_light"
 
