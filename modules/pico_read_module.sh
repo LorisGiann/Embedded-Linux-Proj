@@ -1,9 +1,5 @@
 #!/bin/bash
 
-SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
-cd ${SCR_DIR}
-#echo $SCR_DIR
-
 #constants / definitions
 DEV=$1
 PICO_DEVICE_FILE=$2
@@ -12,6 +8,10 @@ TOPICS[$((i++))]="plant_alarm"
 TOPICS[$((i++))]="pump_alarm"
 TOPICS[$((i++))]="soil_moisture"
 TOPICS[$((i++))]="ambient_light"
+
+
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
 
 cat ${PICO_DEVICE_FILE} | grep -E --line-buffered '^[0-1],[0-1],[0-9]{1,3},[0-9]{1,3}$' | while read LINE ; do	
 	# Each lines consists in a collection of comma separeted values: replace commas with spaces

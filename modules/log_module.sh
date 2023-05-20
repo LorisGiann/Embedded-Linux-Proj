@@ -5,6 +5,9 @@ TOPIC_ROOT=sys_health #topic root in which to publish metrics
 FREQUENCY=60 #publish measuremets every X seconds
 
 
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
+
 #create an associative array in which metrix will be put
 declare -A METRICS
 

@@ -3,11 +3,14 @@
 #constants / definitions
 DEV=$1
 PUMP_REQ_TOPIC=$DEV/pump_req
-
 WAIT_FOR_SECONDS=$((12*60*60)) #every 12h
 PRINT_EVERY_SECONDS=10
 
 
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
+
+#local variables (maintain state between messages)
 remaining=$WAIT_FOR_SECONDS
 
 while true; do

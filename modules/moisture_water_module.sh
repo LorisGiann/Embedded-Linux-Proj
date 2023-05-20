@@ -11,6 +11,10 @@ SOIL_MOISTURE_TOPIC=$DEV/soil_moisture  # a value between 0 and 100 is expected 
 #topics to write to
 PUMP_REQ_TOPIC=$DEV/pump_req
 
+
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
+
 #local variables (maintain state between messages)
 LAST_RUN="0" #last time that pump was activated
 

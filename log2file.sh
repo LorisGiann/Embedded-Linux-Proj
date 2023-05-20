@@ -19,7 +19,7 @@ rotate_file() {
 
     if [[ size -gt max_size ]]; then
       # Rotate the file
-      echo "rotating file"
+      echo "rotating file $file"
       for (( i=max_files-1; i>=1; i-- )); do
         local current_file="${file}.${i}"
         local next_file="${file}.$((i+1))"

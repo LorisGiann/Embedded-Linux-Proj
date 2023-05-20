@@ -11,6 +11,11 @@ __2_TOPIC=$DEV/__topic_2__
 #topics to write to
 OUT_TOPIC=$DEV/__topic_3__
 
+
+
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
+
 #local variables (maintain state between messages)
 
 

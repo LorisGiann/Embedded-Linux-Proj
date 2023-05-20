@@ -4,11 +4,14 @@
 DEV=$1
 PICO_DEVICE_FILE=$2
 
-PUMP_REQ_TOPIC=dev0/pump_req
-PUMP_ALARM_TOPIC=dev0/pump_alarm
+PUMP_REQ_TOPIC=$DEV/pump_req
+PUMP_ALARM_TOPIC=$DEV/pump_alarm
 
 
-#local variables
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
+
+#local variables (maintain state between messages)
 PUMP_ALARM="0" #suppose no alarm at system startup
 
 mosquitto_sub -h localhost -p 1883 -t $PUMP_REQ_TOPIC -t $PUMP_ALARM_TOPIC -d -u pi -P raspberry -F "%t %p" | grep -vE --line-buffered '^Client|^Subscribed' | while read TOPIC MESSAGE 

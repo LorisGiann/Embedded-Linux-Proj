@@ -14,8 +14,11 @@ GREEN_TOPIC=$DEV/led/green
 YELLOW_TOPIC=$DEV/led/yellow
 RED_TOPIC=$DEV/led/red
 
-#local variables (maintain state between messages)
 
+SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
+cd ${SCR_DIR}
+
+#local variables (maintain state between messages)
 PLANT_ALARM=0
 PUMP_ALARM=0
 SOIL_MOISTURE=0
