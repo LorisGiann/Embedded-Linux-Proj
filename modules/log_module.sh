@@ -26,6 +26,14 @@ while true ; do
 	#used space in root directory
 	METRICS["percent_disk"]=$(df --output=target,ipcent | grep -E '^/[[:blank:]]+' | awk '{print $2}' | tr -d \%)
 
+	#internet is reachable?
+	
+	if ping -q -c 1 -W 2 8.8.8.8 >/dev/null; then
+		RES=1
+	else
+		RES=0
+	fi
+	METRICS["internet_perf"]=$RES
 
 
 	for metric in "${!METRICS[@]}"
