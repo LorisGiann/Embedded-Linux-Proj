@@ -2,7 +2,7 @@
 
 #constants / definitions
 DEV=$1 # Pass in device as first argument
-
+MOISTURE_THRESHOLD=$2 # % under which soil moisture is considered low
 
 #topics to subscribe
 PUMP_TOPIC=$DEV/pump_alarm
@@ -22,10 +22,6 @@ cd ${SCR_DIR}
 PLANT_ALARM=0
 PUMP_ALARM=0
 SOIL_MOISTURE=0
-
-MOISTURE_THRESHOLD=50
-
-
 
 mosquitto_sub -h localhost -p 1883 -t $PLANT_TOPIC -t $PUMP_TOPIC -t $SOIL_TOPIC -d -u pi -P raspberry -F "%t %p" | grep -vE --line-buffered '^Client|^Subscribed' | while read TOPIC MESSAGE 
 do 

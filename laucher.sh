@@ -4,11 +4,23 @@ SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
 cd ${SCR_DIR}
 
 #DEFINITIONS
-#the following associative array consists in:
-# - a list of keys identifying the MQTT topics folder in which informations regarding a plant are published
-# - for each key the device file for the pico assiciated with the plant is specified
-declare -A DEVS
-DEVS["dev0"]="/dev/ttyACM0"
+#the following array contains the following parameters for each plant:
+# - the identifying plant name, which corresponds to the MQTT topic prefix in which informations regarding that plant are published
+# - the device file for the pico assiciated with the plant
+# - the % threshold under which the soil moisture is considered low
+#do not put spaces in any of these fields!
+PLANTS=()
+declare -A PLANT
+PLANT["name"]="plant0"
+PLANT["dev"]="/dev/ttyACM0"
+PLANT["soil_thresh"]=50
+PLANTS+=PLANT
+#declare -A PLANT
+#PLANT["name"]="plant1"
+#PLANT["dev"]="/dev/ttyACM1"
+#PLANT["soil_thresh"]=60
+#PLANTS+=PLANT
+
 
 MODULES_DIR="modules"
 LOGS_DIR="logs"
@@ -36,44 +48,30 @@ launch_daemon() {
 
 #start by appending the RPI system health log module
 launch_daemon "./$MODULES_DIR/log_module.sh" "$LOGS_DIR/log_module.sh.log"
-#setsid ./$MODULES_DIR/log_module.sh > >(./log2file.sh $LOGS_DIR/log_module.sh.log 10000 2) 2>&1 & #> logs/log_module.sh.log 2>&1 &
-#pids+=($!)
 
 #Iterate over each device to launch an istance of all the modules
-for DEV in "${!DEVS[@]}"
+for PLANT in "${PLANTS[@]}"
 do
-	#echo "Key: $DEV, Value: ${DEVS[$DEV]}"
-	echo "Starting modules processes for $DEV..."
+	echo "Starting modules processes for $PLANT..."
 
 	#"receiving" modules (edge devs -> system core)
-	launch_daemon "./$MODULES_DIR/pico_read_module.sh $DEV ${DEVS[$DEV]}" "$LOGS_DIR/$DEV/pico_read_module.sh.log"
-	#setsid ./$MODULES_DIR/pico_read_module.sh $DEV ${DEVS[$DEV]} > >(./log2file.sh $LOGS_DIR/$DEV/pico_read_module.sh.log 10000 2) 2>&1 & #> logs/pico_read_module.sh.log 2>&1 &
-	#pids+=($!)
-	launch_daemon "./$MODULES_DIR/button_water_module.sh $DEV" "$LOGS_DIR/$DEV/button_water_module.sh.log"
-	#setsid ./$MODULES_DIR/button_water_module.sh $DEV > >(./log2file.sh $LOGS_DIR/$DEV/button_water_module.sh.log 10000 2) 2>&1 & #> logs/button_water_module.sh.log 2>&1 &
-	#pids+=($!)
+	launch_daemon "./$MODULES_DIR/pico_read_module.sh ${PLANT['name']} ${PLANT['dev']}" "$LOGS_DIR/${PLANT['name']}/pico_read_module.sh.log"
+	launch_daemon "./$MODULES_DIR/button_water_module.sh ${PLANT['name']}" "$LOGS_DIR/${PLANT['name']}/button_water_module.sh.log"
 	
 	#"actuation" modules (system core -> edge devs)
-	launch_daemon "./$MODULES_DIR/water_request_gate_module.sh $DEV ${DEVS[$DEV]}" "$LOGS_DIR/$DEV/water_request_gate_module.sh.log"
-	#setsid ./$MODULES_DIR/water_request_gate_module.sh $DEV ${DEVS[$DEV]} > >(./log2file.sh $LOGS_DIR/$DEV/water_request_gate_module.sh.log 10000 2) 2>&1 & #> logs/water_request_gate_module.sh.log 2>&1 &
-	#pids+=($!)
-	launch_daemon "./$MODULES_DIR/led_module.sh $DEV ${DEVS[$DEV]}" "$LOGS_DIR/$DEV/led_module.sh.log"
-	#setsid ./$MODULES_DIR/led_module.sh $DEV ${DEVS[$DEV]} > >(./log2file.sh $LOGS_DIR/$DEV/led_module.sh.log 10000 2) 2>&1 & #> logs/led_module.sh.log 2>&1 &
-	#pids+=($!)
+	launch_daemon "./$MODULES_DIR/water_request_gate_module.sh ${PLANT['name']} ${PLANT['dev']}" "$LOGS_DIR/${PLANT['name']}/water_request_gate_module.sh.log"
+	launch_daemon "./$MODULES_DIR/led_module.sh ${PLANT['name']} ${PLANT['soil_thresh']}" "$LOGS_DIR/${PLANT['name']}/led_module.sh.log"
 	
 	#processing / event generation modules
-	launch_daemon "./$MODULES_DIR/moisture_water_module.sh $DEV" "$LOGS_DIR/$DEV/moisture_water_module.sh.log"
-	#setsid ./$MODULES_DIR/moisture_water_module.sh $DEV > >(./log2file.sh $LOGS_DIR/$DEV/moisture_water_module.sh.log 10000 2) 2>&1 & #> logs/moisture_water_module.sh.log 2>&1 &
-	#pids+=($!)
-	launch_daemon "./$MODULES_DIR/regular_water_module.sh $DEV" "$LOGS_DIR/$DEV/regular_water_module.sh.log"
-	#setsid ./$MODULES_DIR/regular_water_module.sh $DEV > >(./log2file.sh $LOGS_DIR/$DEV/regular_water_module.sh.log 10000 2) 2>&1 & #> logs/regular_water_module.sh.log 2>&1 &
-	#pids+=($!)
+	launch_daemon "./$MODULES_DIR/moisture_water_module.sh ${PLANT['name']} ${PLANT['soil_thresh']}" "$LOGS_DIR/${PLANT['name']}/moisture_water_module.sh.log"
+	launch_daemon "./$MODULES_DIR/regular_water_module.sh ${PLANT['name']}" "$LOGS_DIR/${PLANT['name']}/regular_water_module.sh.log"
 	
 done
 
 
 echo "Background modules processes started (PIDs: ${pids[@]})"
 ps fj -P ${pids[@]}
+echo "(Current launcher process PID: $$)"
 
 # Wait for user input to terminate the background processes
 echo "Press any key to terminate the system"
