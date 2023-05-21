@@ -27,7 +27,8 @@ LOGS_DIR="logs"
 
 
 rm -rf $LOGS_DIR > /dev/null 2>&1 # Initialize a directory for logs
-pids=()  # Initialize an empty array to hold the PIDs of the background processes
+pids=()  # Initialize an array to hold the PIDs of the background processes
+pipes=() # Initialize an array to hold used named pipes
 
 #start a new process and log it
 #Each instance is launched in a new session so that all subprocesses can be terminated at a later time by sending the signal to the relevant process group
@@ -39,9 +40,9 @@ launch_daemon() {
     mkfifo $PIPE
     setsid $COMMAND >"$PIPE" 2>&1 & pid1=$!
     ./log2file.sh "$LOG_FILE" 10000 2 <"$PIPE" &
-    # unlink the named pipe (will effectively be removed once the first command terminates)
-    rm $PIPE
-    #save the pid
+    #save the pipe name to schedule unlink of the named pipe during cleanup
+    pipes+=($PIPE)
+    #save the pid to schedule process termination during cleanup
     pids+=($pid1)
 }
 
@@ -83,6 +84,10 @@ for PID in "${pids[@]}"; do
 	PGID=$(ps opgid= "$PID" | tr -d ' ') #get the whole process group of the session with the launghed command. Tipically PGID is the same of the root PID
 	if [ -z "$PGID" ]; then continue; fi
 	kill -SIGTERM -$PGID #term all the processes of the group
+done
+echo "Closing named pipes..."
+for PIPE in "${pipes[@]}"; do
+	rm $PIPE
 done
 echo "Background processes terminated"
 ps fj -P ${pids[@]}
