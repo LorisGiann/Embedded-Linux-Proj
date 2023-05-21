@@ -19,8 +19,8 @@ SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
 cd ${SCR_DIR}
 
 #local variables (maintain state between messages)
-PLANT_ALARM=0
-PUMP_ALARM=0
+PLANT_ALARM=1 #defensive: suppose there's an alarm at startup before receiving any message
+PUMP_ALARM=1 #defensive: suppose there's an alarm at startup before receiving any message
 SOIL_MOISTURE=0
 
 mosquitto_sub -h localhost -p 1883 -t $PLANT_TOPIC -t $PUMP_TOPIC -t $SOIL_TOPIC -d -u pi -P raspberry -F "%t %p" | grep -vE --line-buffered '^Client|^Subscribed' | while read TOPIC MESSAGE 
