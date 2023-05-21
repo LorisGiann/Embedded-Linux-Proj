@@ -16,7 +16,7 @@ cd ${SCR_DIR}
 PUMP_ALARM="1" #defensive: suppose there's an alarm at startup before receiving any message
 PLANT_ALARM="1" #defensive: suppose there's an alarm at startup before receiving any message
 
-mosquitto_sub -h localhost -p 1883 -t $PUMP_REQ_TOPIC -t $PUMP_ALARM_TOPIC -d -u pi -P raspberry -F "%t %p" | grep -vE --line-buffered '^Client|^Subscribed' | while read TOPIC MESSAGE 
+mosquitto_sub -h localhost -p 1883 -t $PUMP_REQ_TOPIC -t $PUMP_ALARM_TOPIC -t $PLANT_ALARM_TOPIC -d -u pi -P raspberry -F "%t %p" | grep -vE --line-buffered '^Client|^Subscribed' | while read TOPIC MESSAGE 
 do 
 	#echo "From \"$TOPIC\": \"$MESSAGE\""
 

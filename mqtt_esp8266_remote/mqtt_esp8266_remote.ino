@@ -49,7 +49,7 @@ ICACHE_RAM_ATTR void count_isr(){
 #define AIO_USERNAME    "pi"
 #define AIO_KEY         "raspberry"
 
-#define MQTT_BASE_TOPIC  "dev0"
+#define MQTT_BASE_TOPIC  "plant0"
 //#define MQTT_RED         "/led/red"
 //#define MQTT_YELLOW      "/led/yellow"
 //#define MQTT_GREEN       "/led/green"
