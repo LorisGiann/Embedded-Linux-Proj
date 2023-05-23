@@ -9,14 +9,16 @@ mosquitto_pub -h localhost -p 1883 -t dev0/button -m 0 -u pi -P raspberry
 
 cd rpi_modules/
 
+#SETTING THE TERMINAL PRETENDING TO BE THE DEVICE
 #Create the device file devttyACM0, and another device that is the other end we use to emulate what the device would send and receive
-socat PTY,raw,echo=0,link=devttyACM0 PTY,raw,echo=0,link=devttyACM0_socat &
+socat PTY,raw,echo=0,link=/dev/ttyACM0 PTY,raw,echo=0,link=devttyACM0_socat &
 sleep 1
 #This other end (devttyACM0_socat) is the one we now connect our terminal. We can write things pretending to be the device, and read the things the device would receive
 cat devttyACM0_socat & PID=$! ; cat | while read LINE ; do echo $LINE > devttyACM0_socat; done
 kill $PID
 
+#SETTING THE TERMINAL PRETENDING TO BE THE PROGRAM
 #optionally, we can see what the program would see reading the device file, and write to the device pretending to be the program
 #do not run the following when your program is running!!
-cat devttyACM0 & PID=$! ; cat | while read LINE ; do echo $LINE > devttyACM0; done
+cat /dev/ttyACM0 & PID=$! ; cat | while read LINE ; do echo $LINE > /dev/ttyACM0; done
 kill $PID

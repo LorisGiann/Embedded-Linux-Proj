@@ -74,9 +74,16 @@ echo "Background modules processes started (PIDs: ${pids[@]})"
 ps fj -P ${pids[@]}
 echo "(Current launcher process PID: $$)"
 
+
 # Wait for user input to terminate the background processes
-echo "Press any key to terminate the system"
-read -n 1 -s
+#echo "Press any key to terminate the system"
+#read -n 1 -s
+
+#wait until SIGTERM (CRTL+C) is received
+sleep infinity & PID=$!
+trap "kill $PID" INT TERM
+wait   #the launched process will wait for the "sleep infinity" process to finish, which happens as soon as SIGTERM is received
+
 
 # Kill all the background processes using their PIDs
 echo "Terminating background processes..."

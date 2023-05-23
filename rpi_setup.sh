@@ -1,4 +1,5 @@
 #!/bin/bash
+#Just cd into the project directory and execute the file
 
 sudo usermod -a -G dialout $USER
 sudo stty -F /dev/ttyACM0 115200 -ixon -ixoff
@@ -36,3 +37,24 @@ echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https
 sudo apt update
 sudo apt install telegraf
 sudo systemctl enable telegraf
+
+
+# Setup a unit file to start the script at startup
+UNIT_FILE=/lib/systemd/system/plantWatering.service
+sudo touch "${UNIT_FILE}"
+
+append () {
+  echo "$1" | sudo tee -a "${UNIT_FILE}"
+}
+
+append "[Unit]"
+append "Description=plant watering system project"
+append "[Service]"
+append "ExecStart=$PWD/launcher.sh >/dev/null 2>&1"
+append "[Install]"
+append "WantedBy=default.target"
+
+sudo systemctl daemon-reload
+sudo systemctl enable plantWatering.service
+sudo systemctl start plantWatering.service
+sudo systemctl status plantWatering.service
