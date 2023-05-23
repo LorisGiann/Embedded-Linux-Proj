@@ -7,7 +7,7 @@ sudo stty -F /dev/ttyACM0 115200 -ixon -ixoff
 sudo apt install mosquitto mosquitto-clients
 sudo systemctl enable mosquitto.service
 
-sudo touch /etc/mosquitto/conf.d/auth.conf
+sudo bash -c '>/etc/mosquitto/conf.d/auth.conf'
 sudo bash -c 'echo "allow_anonymous false"               >> /etc/mosquitto/conf.d/auth.conf'
 sudo bash -c 'echo "password_file /etc/mosquitto/pwfile" >> /etc/mosquitto/conf.d/auth.conf'
 sudo bash -c 'echo "listener 1883"                       >> /etc/mosquitto/conf.d/auth.conf'
@@ -41,7 +41,7 @@ sudo systemctl enable telegraf
 
 # Setup a unit file to start the script at startup
 UNIT_FILE=/lib/systemd/system/plantWatering.service
-sudo touch "${UNIT_FILE}"
+sudo bash -c ">${UNIT_FILE}"
 
 append () {
   echo "$1" | sudo tee -a "${UNIT_FILE}"
@@ -49,6 +49,7 @@ append () {
 
 append "[Unit]"
 append "Description=plant watering system project"
+append "Requires=mosquitto.service"
 append "[Service]"
 append "ExecStart=$PWD/launcher.sh >/dev/null 2>&1"
 append "[Install]"
