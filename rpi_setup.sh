@@ -50,6 +50,7 @@ append () {
 append "[Unit]"
 append "Description=plant watering system project"
 append "Requires=mosquitto.service"
+append "After=mosquitto.service"
 append "[Service]"
 append "ExecStart=$PWD/launcher.sh >/dev/null 2>&1"
 append "[Install]"
