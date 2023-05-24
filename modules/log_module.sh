@@ -24,7 +24,7 @@ while true ; do
 	METRICS["percent_mem"]=$((available_mem*100 / used_mem))
 
 	#used space in root directory
-	METRICS["percent_disk"]=$(df --output=target,ipcent | grep -E '^/[[:blank:]]+' | awk '{print $2}' | tr -d \%)
+	METRICS["percent_disk"]=$(df --output=target,pcent | grep -E '^/[[:blank:]]+' | awk '{print $2}' | tr -d \%)
 
 	#internet is reachable?
 	
