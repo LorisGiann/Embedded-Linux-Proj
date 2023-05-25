@@ -22,3 +22,18 @@ kill $PID
 #do not run the following when your program is running!!
 cat /dev/ttyACM0 & PID=$! ; cat | while read LINE ; do echo $LINE > /dev/ttyACM0; done
 kill $PID
+
+# UFW Firewall Commands
+# Enable Browsing Online
+sudo ufw allow 443
+sudo ufw allow 80
+sudo ufw allow 8080
+# Disable Browsing Online
+sudo ufw deny 443
+sudo ufw deny 80
+sudo ufw deny 8080
+
+# fail2ban for security
+sudo apt install fail2ban
+sudo cp /etc/fail2ban/fail2ban.conf /etc/fail2ban/fail2ban.local
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
