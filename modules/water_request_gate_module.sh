@@ -2,11 +2,13 @@
 
 #constants / definitions
 DEV=$1
-PICO_DEVICE_FILE=$2
 
+#input topics
 PUMP_REQ_TOPIC=$DEV/pump_req
 PUMP_ALARM_TOPIC=$DEV/pump_alarm
 PLANT_ALARM_TOPIC=$DEV/plant_alarm
+#output topics
+PUMP_CMD_TOPIC=$DEV/pump_cmd
 
 
 SCR_DIR=$(dirname -- "$(readlink -f "${BASH_SOURCE}")")
@@ -37,7 +39,7 @@ do
 	elif [[ $TOPIC == $PUMP_REQ_TOPIC ]] ; then
 		if [[ $PUMP_ALARM == "0" && $PLANT_ALARM == "0" ]] ; then
 			echo "Pump request ACCEPTED"
-			echo "p" > $PICO_DEVICE_FILE
+			./mqtt_pub.sh $PUMP_CMD_TOPIC "1"
 		else
 			echo "Pump request REJECTED (PUMP_ALARM: $PUMP_ALARM, PLANT_ALARM: $PLANT_ALARM)"
 		fi

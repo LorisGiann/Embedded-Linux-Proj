@@ -60,12 +60,13 @@ do
 	launch_daemon "./$MODULES_DIR/button_water_module.sh ${PLANT['name']}" "$LOGS_DIR/${PLANT['name']}/button_water_module.sh.log"
 	
 	#"actuation" modules (system core -> edge devs)
-	launch_daemon "./$MODULES_DIR/water_request_gate_module.sh ${PLANT['name']} ${PLANT['dev']}" "$LOGS_DIR/${PLANT['name']}/water_request_gate_module.sh.log"
+	launch_daemon "./$MODULES_DIR/pico_write_module.sh ${PLANT['name']} ${PLANT['dev']}" "$LOGS_DIR/${PLANT['name']}/pico_write_module.sh.log"
 	launch_daemon "./$MODULES_DIR/led_module.sh ${PLANT['name']} ${PLANT['soil_thresh']}" "$LOGS_DIR/${PLANT['name']}/led_module.sh.log"
 	
 	#processing / event generation modules
 	launch_daemon "./$MODULES_DIR/moisture_water_module.sh ${PLANT['name']} ${PLANT['soil_thresh']}" "$LOGS_DIR/${PLANT['name']}/moisture_water_module.sh.log"
 	launch_daemon "./$MODULES_DIR/regular_water_module.sh ${PLANT['name']}" "$LOGS_DIR/${PLANT['name']}/regular_water_module.sh.log"
+	launch_daemon "./$MODULES_DIR/water_request_gate_module.sh ${PLANT['name']}" "$LOGS_DIR/${PLANT['name']}/water_request_gate_module.sh.log"
 	
 done
 
