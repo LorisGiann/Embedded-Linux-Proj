@@ -10,7 +10,7 @@ cd ${SCR_DIR}
 
 #create an associative array in which metrix will be put
 declare -A METRICS
-
+CONTER_SPEEDTEST=0
 
 while true ; do
 	#CPU usage and temperature
@@ -31,20 +31,29 @@ while true ; do
 	if ping -q -c 1 -W 2 8.8.8.8 >/dev/null; then
 		RES=1
 		# Internet Speed
-        	SPEED=$(speedtest-cli | grep -oP '(?<=Download: )[0-9]+')
-		METRICS["internet_speed"]=$(speedtest-cli | grep -oP '(?<=Download: )[0-9]+')
-
+		if [[ $CONTER_SPEEDTEST -ge 5 ]] ; then
+			CONTER_SPEEDTEST=0
+			echo "Running speedtest..."
+			SPEED=$(speedtest-cli | grep -oP '(?<=Download: )[0-9]+')
+			METRICS["internet_speed"]=$(speedtest-cli | grep -oP '(?<=Download: )[0-9]+')
+			echo "done: $SPEED"
+		else
+			((CONTER_SPEEDTEST++))
+			METRICS["internet_speed"]=
+		fi
 	else
 		RES=0
-		METRICS["internet_speed"]=0
+		METRICS["internet_speed"]=
 	fi
 	METRICS["internet_perf"]=$RES
 
 	for metric in "${!METRICS[@]}"
 	do
-		val=${METRICS[$metric]}
-		echo "$metric: $val"
-		./mqtt_pub.sh $TOPIC_ROOT/$metric $val
+		if [[ ! -z "${METRICS[$metric]}" ]]; then
+			val=${METRICS[$metric]}
+			echo "$metric: $val"
+			./mqtt_pub.sh $TOPIC_ROOT/$metric $val
+		fi
 	done
 
 	sleep $FREQUENCY

@@ -118,3 +118,7 @@ sudo systemctl enable wifi-router.service
 sudo systemctl start wifi-router.service
 sudo systemctl status wifi-router.service
 
+
+
+#misc
+sudo apt install speedtest-cli
