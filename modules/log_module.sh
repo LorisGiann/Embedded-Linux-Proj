@@ -30,11 +30,15 @@ while true ; do
 	
 	if ping -q -c 1 -W 2 8.8.8.8 >/dev/null; then
 		RES=1
+		# Internet Speed
+        	SPEED=$(speedtest-cli | grep -oP '(?<=Download: )[0-9]+')
+		METRICS["internet_speed"]=$(speedtest-cli | grep -oP '(?<=Download: )[0-9]+')
+
 	else
 		RES=0
+		METRICS["internet_speed"]=0
 	fi
 	METRICS["internet_perf"]=$RES
-
 
 	for metric in "${!METRICS[@]}"
 	do

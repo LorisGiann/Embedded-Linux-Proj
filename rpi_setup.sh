@@ -75,7 +75,8 @@ append '        "sys_health/percent_cpu",' "${TELEGRAPH_CONF_FILE}"
 append '        "sys_health/percent_mem",' "${TELEGRAPH_CONF_FILE}"
 append '        "sys_health/temp_cpu",' "${TELEGRAPH_CONF_FILE}"
 append '        "sys_health/percent_disk",' "${TELEGRAPH_CONF_FILE}"
-append '        "sys_health/internet_perf"' "${TELEGRAPH_CONF_FILE}"
+append '        "sys_health/internet_perf",' "${TELEGRAPH_CONF_FILE}"
+append '	"sys_health/internet_speed"' "${TELEGRAPH_CONF_FILE}"
 append ']' "${TELEGRAPH_CONF_FILE}"
 
 
