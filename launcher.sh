@@ -13,7 +13,7 @@ PLANTS=()
 declare -A PLANT
 PLANT["name"]="plant0"
 PLANT["dev"]="/dev/ttyACM0"
-PLANT["soil_thresh"]=50
+PLANT["soil_thresh"]=40
 PLANTS+=PLANT
 #declare -A PLANT
 #PLANT["name"]="plant1"
