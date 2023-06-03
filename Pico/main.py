@@ -48,5 +48,5 @@ while True:
         pump_control.low()
     else:
         utime.sleep(1)
-        print("%d,%d,%.0f,%.0f" % (plant_water_alarm.value(), negate(pump_water_alarm.value()), moisture(),light()))
+        print("%d,%d,%.0f,%.0f" % (plant_water_alarm.value(), negate(pump_water_alarm.value()), 100-moisture(),light()))
 
