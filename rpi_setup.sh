@@ -11,8 +11,9 @@ append () {
 #rpi pico device
 sudo usermod -a -G dialout $USER
 sudo stty -F /dev/ttyACM0 115200 -ixon -ixoff
-
-#TODO udev rule
+#udev rule
+sudo bash -c '>/etc/mosquitto/conf.d/auth.conf'
+sudo bash -c 'SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0005", ATTRS{serial}=="e6605481db404c37", MODE="0666", SYMLINK+="/dev/ttyACM0" >> /etc/udev/rules.d/99-pico-plant0.rules'
 
 #mosquitto
 sudo apt install mosquitto mosquitto-clients
