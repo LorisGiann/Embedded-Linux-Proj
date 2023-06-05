@@ -18,7 +18,7 @@ Data is collected in a time series database (Influx DB) and displayed with the a
 MQTT has been chosen as a messaging system (since MQTT clients can easily be implemented on the ESP). Mosquitto runs locally on the RPI and connection between the ESP and RPI is possible by configuring the Pi WiFi interface as an access point.
 
 ## Modules
-The system is engineered as an actor model. The actors (or "modules") interactions are summarized by the following diagram. Each module has it's own bash script (under the _/modules_ dir).
+The system is engineered as an actor model. The actors (or "modules") interactions are summarized by the following diagram. Each module has its own bash script (under the _/modules_ dir).
 ![Module Diagram](img/EMLI.svg)
 
 ## Configuring and running the system
@@ -26,9 +26,19 @@ A setup script (_rpi_setup.sh_) has been provided to install and configure the n
 Reproducing the current setup _should™®℠©_ be as easy as:
 * Clone the repo and cd into the project dir
 * Programming and connecting the Pico via USB (Thonny has been used for that)
-* Executing the _rpi_setup.sh_ installation script
+* Executing the _rpi_setup.sh_ installation script (chose "raspberry" as mqtt broker password if you dont want to change system config)
 * Programming the ESP (optional... the system will work even without it)
-* Import the dashboard in Grafana (that should already be running on port 3000)
+* Add the datasource (URL=http://127.0.0.1:8086,BD=emli_project,user="telegraf",passwd="emli") and import the dashboard in Grafana (that should already be running on port 3000)
+
+Sample commands:
+
+    sudo apt update   
+    sudo apt install git
+    git clone https://github.com/LorisGiann/Embedded-Linux-Proj
+    cd Embedded-Linux-Proj
+    chmod +x rpi_setup.sh
+    ./rpi_setup.sh
+
 
 ## Good to know
 All the module are launched and managed by the _launcher.sh_ script. This script is in turn managed by Systemd, and gets executed at system startup. You should be able to manage the thing by means of the systemctl command:

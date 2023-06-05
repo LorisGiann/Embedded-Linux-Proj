@@ -49,7 +49,6 @@ echo '393e8779c89ac8d958f81f942f9ad7fb82a25e133faddaf92e15b16e6ac9ce4c influxdat
 echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive_compat.gpg] https://repos.influxdata.com/debian stable main' | sudo tee /etc/apt/sources.list.d/influxdata.list
 sudo apt update
 sudo apt install telegraf
-sudo systemctl enable telegraf
 
 TELEGRAPH_CONF_FILE="/etc/telegraf/telegraf.d/plantWateringEMLI.conf"
 sudo bash -c ">${TELEGRAPH_CONF_FILE}"
@@ -81,6 +80,8 @@ append '        "sys_health/internet_perf",' "${TELEGRAPH_CONF_FILE}"
 append '	"sys_health/internet_speed"' "${TELEGRAPH_CONF_FILE}"
 append ']' "${TELEGRAPH_CONF_FILE}"
 
+sudo systemctl enable telegraf
+sudo systemctl start telegraf
 
 # Setup a unit file to start the script at startup
 UNIT_FILE=/lib/systemd/system/plantWatering.service
