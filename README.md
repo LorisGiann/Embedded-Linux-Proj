@@ -26,9 +26,9 @@ A setup script (_rpi_setup.sh_) has been provided to install and configure the n
 Reproducing the current setup _should™®℠©_ be as easy as:
 * Clone the repo and cd into the project dir
 * Programming and connecting the Pico via USB (Thonny has been used for that)
-* Executing the _rpi_setup.sh_ installation script (chose "raspberry" as mqtt broker password if you dont want to change system config)
+* Executing the _rpi_setup.sh_ installation script (chose "raspberry" as MQTT broker password if you don't want to change the system config)
 * Programming the ESP (optional... the system will work even without it)
-* Add the datasource (URL=http://127.0.0.1:8086,BD=emli_project,user="telegraf",passwd="emli") and import the dashboard in Grafana (that should already be running on port 3000)
+* Add the data source (URL=http://127.0.0.1:8086,BD=emli_project,user="telegraf",passwd="emli") and import the dashboard in Grafana (that should already be running on port 3000)
 
 Sample commands:
 
@@ -41,6 +41,6 @@ Sample commands:
 
 
 ## Good to know
-All the module are launched and managed by the _launcher.sh_ script. This script is in turn managed by Systemd, and gets executed at system startup. You should be able to manage the thing by means of the systemctl command:
+All the modules are launched and managed by the _launcher.sh_ script. This script is in turn managed by Systemd, and gets executed at system startup. You should be able to manage the thing by means of the systemctl command:
     
     sudo systemctl status plantWatering.service
